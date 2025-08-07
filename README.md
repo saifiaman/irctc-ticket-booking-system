@@ -63,10 +63,4 @@ A Java-based console application that simulates the core functionalities of the 
 Pull requests are welcome. For major changes, please open an issue first to discuss the changes you would like to make.
 
 ---
-> 🚆 Built with ❤️ by Aman Saifi as part of a Java learning journey.
-
-
-
-
-ghchcc
-ghchgc
+> 🚆 Built with ❤️ by Aman Saifi as part of a Spring Boot learning journey.
