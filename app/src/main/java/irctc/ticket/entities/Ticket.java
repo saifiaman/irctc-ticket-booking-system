@@ -10,6 +10,26 @@ public class Ticket {
     private String Train;
     private double fare;
 
+    // Constructor to initialize ticket details
+    public Ticket(String ticketId, String trainNumber, String passengerName, String sourceStation,
+            String destinationStation, String travelDate, double fare, String train) {
+        this.ticketId = ticketId;
+        this.trainNumber = trainNumber;
+        this.passengerName = passengerName;
+        this.sourceStation = sourceStation;
+        this.destinationStation = destinationStation;
+        this.travelDate = travelDate;
+        this.fare = fare;
+        this.Train = train;
+    }
+
+    // get ticket details
+    public String getTicketDetails() {
+        return String.format(
+                "Ticket ID: %s, Train Number: %s, Passenger Name: %s, Source: %s, Destination: %s, Date: %s, Fare: %.2f, Train: %s",
+                ticketId, trainNumber, passengerName, sourceStation, destinationStation, travelDate, fare, Train);
+    }
+
     // Getters and Setters
     public String getTicketId() {
         return ticketId;

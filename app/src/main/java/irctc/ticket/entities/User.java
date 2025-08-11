@@ -3,23 +3,32 @@ package irctc.ticket.entities;
 import java.util.List;
 
 public class User {
-    private String userId;
     private String username;
     private String password;
-    private String hassPassword;
+    private String hashedPassword;
     private String email;
     private String phoneNumber;
     private List<Ticket> bookedTickets;
 
+    public User(String username, String password, String hashedPassword, List<Ticket> bookedTickets,
+            String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.hashedPassword = hashedPassword;
+        this.bookedTickets = bookedTickets;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User() {
+    }
+
+    public void printTickets() {
+        for (int i = 0; i < bookedTickets.size(); i++) {
+            System.out.println("Ticket " + (i + 1) + ": " + bookedTickets.get(i).getTicketDetails());
+        }
+    }
+
     // Getters and Setters
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -36,12 +45,12 @@ public class User {
         this.password = password;
     }
 
-    public String hassPassword() {
-        return hassPassword;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void hassPassword(String hassPassword) {
-        this.hassPassword = hassPassword;
+    public void setHashedPassword(String hassPassword) {
+        this.hashedPassword = hassPassword;
     }
 
     public String getEmail() {

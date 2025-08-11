@@ -3,12 +3,130 @@
  */
 package irctc.ticket.booking.system;
 
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import irctc.ticket.entities.Train;
+import irctc.ticket.services.UserBookingService;
+import irctc.ticket.entities.User; // Changed from irctc.ticket.booking.system.models.User
+import irctc.ticket.util.UserServiceUtil; // Also fixed this import
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        System.out.println("Running train booking system");
+        Scanner sc = new Scanner(System.in);
+        int choice = 0;
+        UserBookingService userBookingService;
+
+        try {
+            userBookingService = new UserBookingService();
+
+        } catch (IOException e) {
+            System.out.println("There is something wrong!!");
+            return;
+        }
+
+        while (choice != 7) {
+            System.out.println("----------------**********----------------");
+            System.out.println("Choose Options");
+            System.out.println("1. Sign Up");
+            System.out.println("2. Login");
+            System.out.println("3. Fetch Bookings");
+            System.out.println("4. Search Trains");
+            System.out.println("5. Book a Seat");
+            System.out.println("6. Cancel my booking");
+            System.out.println("7. Exit the App");
+            System.out.println("----------------**********----------------");
+
+            choice = sc.nextInt();
+            String trainSelectedForBooking = null;
+            switch (choice) {
+                case 1:
+                    // Prompt user for sign up details
+                    System.out.print("Enter username: ");
+                    String username = sc.next();
+                    System.out.print("Enter password: ");
+                    String password = sc.next();
+                    System.out.print("Enter Phone Number: ");
+                    String phoneNumber = sc.next();
+                    // You may need to adjust the User class constructor as per your implementation
+                    User user1 = new User(username, password, UserServiceUtil.hashPassword(password), new ArrayList<>(),
+                            phoneNumber);
+                    break;
+                case 2:
+                    System.out.print("Enter username: ");
+                    String loginUsername = sc.next();
+                    System.out.print("Enter password: ");
+                    String loginPassword = sc.next();
+                    System.out.print("Enter Phone Number: ");
+                    String loginPhoneNumber = sc.next();
+                    User userToLogin = new User(loginUsername, loginPassword,
+                            UserServiceUtil.hashPassword(loginPassword), new ArrayList<>(), loginPhoneNumber);
+                    try {
+                        userBookingService = new UserBookingService(userToLogin);
+                    } catch (Exception e) {
+                        System.out.println("Login failed: " + e.getMessage());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Fetching bookings...");
+                    try {
+                        Thread.sleep(3000);
+                        userBookingService.fetchBooking();
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread was interrupted: " + e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Error fetching bookings: " + e.getMessage());
+                    }
+                    break;
+                case 4:
+                    // Implement train search logic here
+                    System.out.println("Enter the source station: ");
+                    String source = sc.next();
+                    System.out.println("Enter the destination station: ");
+                    String destination = sc.next();
+                    System.out.println("Searching for trains from " + source + " to " + destination + "...");
+
+                    // Here you would typically call a method to search for trains
+                    List<Train> trains = userBookingService.getTrains(source, destination);
+                    int index = 0;
+                    for (Train train : trains) {
+                        System.out.println("Train " + (index++) + ": " + train.getTrainNumber());
+                        System.out.println("  Arrival Time: " + train.getArrivalTime());
+                    }
+                    System.out.println("Select a train by typing 1, 2 , 3...");
+                    trainSelectedForBooking = trains.get(sc.nextInt()).getTrainNumber();
+                    break;
+                case 5:
+                    // Implement booking logic here
+                    System.out.println("Select a seat out of these seats");
+                    List<List<Integer>> seats = userBookingService.fetchSeats(trainSelectedForBooking);
+                    for (List<Integer> row : seats) {
+                        System.out.println("Row: " + row);
+                    }
+                    System.out.println();
+                    System.out.println("Select a seat number by typing row and column");
+                    System.out.println("Select row:");
+                    int selectedRow = sc.nextInt();
+                    System.out.println("Select column:");
+                    int selectedColumn = sc.nextInt();
+                    // Implement seat selection logic here
+                    userBookingService.selectSeat(trainSelectedForBooking, selectedRow, selectedColumn);
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    System.out.println("Exiting the App. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
+        }
+
     }
 }

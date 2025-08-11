@@ -17,6 +17,23 @@ public class Train {
     private Map<String, Time> stationTimes;
     private List<String> stations;
 
+    // constructor to initialize train details
+    public Train(String trainNumber, String trainName, String sourceStation, String destinationStation,
+            String travelDate, String departureTime, String arrivalTime, double fare,
+            List<List<Integer>> seatNumbers, Map<String, Time> stationTimes, List<String> stations) {
+        this.trainNumber = trainNumber;
+        this.trainName = trainName;
+        this.sourceStation = sourceStation;
+        this.destinationStation = destinationStation;
+        this.travelDate = travelDate;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.fare = fare;
+        this.seatNumbers = seatNumbers;
+        this.stationTimes = stationTimes;
+        this.stations = stations;
+    }
+
     // Getters and Setters
     public String getTrainNumber() {
         return trainNumber;
