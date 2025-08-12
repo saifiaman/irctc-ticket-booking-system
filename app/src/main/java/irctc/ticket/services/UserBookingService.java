@@ -1,5 +1,6 @@
 package irctc.ticket.services;
 
+import irctc.ticket.entities.Ticket;
 import irctc.ticket.entities.Train;
 import irctc.ticket.entities.User;
 import irctc.ticket.util.UserServiceUtil;
@@ -19,7 +20,7 @@ public class UserBookingService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String USERS_PATH = "../localDb/users.json";
+    private static final String USERS_PATH = "/Users/amansaifi/Desktop/Coding/SpringBoot/irctc-ticket-booking-system/app/src/main/java/irctc/localDb/users.json";
 
     public UserBookingService(User user1) throws IOException {
         this.user = user1;
@@ -56,7 +57,7 @@ public class UserBookingService {
     }
 
     // SignUp or register User code
-    public boolean SignUp(User user1) {
+    public boolean signUp(User user1) {
         try {
             userList.add(user1);
             saveUserListToFile();
@@ -96,24 +97,14 @@ public class UserBookingService {
         return new ArrayList<>();
     }
 
-    // fetch seats for a train
-    public List<List<Integer>> fetchSeats(String trainNumber) {
-
-        List<List<Integer>> seats = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            List<Integer> row = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
-                row.add(0); // 0 means available, you can change logic as per your requirement
-            }
-            seats.add(row);
-        }
-        return seats;
+    public List<List<Integer>> fetchSeats(Train train) {
+        return train.getSeatNumbers();
     }
 
     // Select a seat for a train
-    public void selectSeat(String trainNumber, int row, int column) {
+    public void selectSeat(Train train, int row, int column) {
         // In a real application, seat data should be persisted and validated
-        List<List<Integer>> seats = fetchSeats(trainNumber);
+        List<List<Integer>> seats = fetchSeats(train);
         if (row >= 0 && row < seats.size() && column >= 0 && column < seats.get(row).size()) {
             if (seats.get(row).get(column) == 0) {
                 seats.get(row).set(column, 1); // 1 means booked
@@ -124,7 +115,48 @@ public class UserBookingService {
         } else {
             System.out.println("Invalid seat selection.");
         }
-        System.out.println("Seat selected for train " + trainNumber + " at row " + row + ", column " + column);
+        System.out
+                .println("Seat selected for train " + train.getTrainNumber() + " at row " + row + ", column " + column);
+    }
+
+    // Book a seat for a train
+    public Boolean bookTrainSeat(Train trainSelectedForBooking, int row, int seat) {
+        try {
+            TrainService trainService = new TrainService();
+            List<List<Integer>> seats = trainSelectedForBooking.getSeatNumbers();
+            if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
+                if (seats.get(row).get(seat) == 0) {
+                    seats.get(row).set(seat, 1);
+
+                    trainSelectedForBooking.setSeatNumbers(seats);
+                    trainService.addTrain(trainSelectedForBooking);
+
+                    Ticket ticket = new Ticket();
+
+                    ticket.setSourceStation(trainSelectedForBooking.getStations().getFirst());
+                    ticket.setDestinationStation(trainSelectedForBooking.getStations().getLast());
+                    ticket.setTrain(trainSelectedForBooking);
+                    ticket.setPassengerName(user.getUsername());
+                    ticket.setTravelDate("2021-09-01");
+                    ticket.setTicketId(UserServiceUtil.generateTicketId());
+
+                    user.getBookedTickets().add(ticket);
+
+                    System.out.println("Seat booked successfully  !  ");
+
+                    System.out.println(ticket.getTicketDetails());
+
+                    saveUserListToFile();
+                    return true; // Booking successful
+                } else {
+                    return false; // Execute when Seat is already booked
+                }
+            } else {
+                return false; // Execute when Invalid row or seat index
+            }
+        } catch (IOException ex) {
+            return Boolean.FALSE;
+        }
     }
 
 }

@@ -2,9 +2,9 @@ package irctc.ticket.entities;
 
 import java.util.List;
 import java.util.Map;
-import java.sql.Time;
 
 public class Train {
+    private String trainId;
     private String trainNumber;
     private String trainName;
     private String sourceStation;
@@ -14,13 +14,14 @@ public class Train {
     private String arrivalTime;
     private double fare;
     private List<List<Integer>> seatNumbers;
-    private Map<String, Time> stationTimes;
+    private Map<String, String> stationTimes;
     private List<String> stations;
 
     // constructor to initialize train details
-    public Train(String trainNumber, String trainName, String sourceStation, String destinationStation,
+    public Train(String trainId, String trainNumber, String trainName, String sourceStation, String destinationStation,
             String travelDate, String departureTime, String arrivalTime, double fare,
-            List<List<Integer>> seatNumbers, Map<String, Time> stationTimes, List<String> stations) {
+            List<List<Integer>> seatNumbers, Map<String, String> stationTimes, List<String> stations) {
+        this.trainId = trainId;
         this.trainNumber = trainNumber;
         this.trainName = trainName;
         this.sourceStation = sourceStation;
@@ -34,7 +35,19 @@ public class Train {
         this.stations = stations;
     }
 
+    public Train() {
+        // Default constructor for Jackson
+    }
+
     // Getters and Setters
+    public String getTrainId() {
+        return trainId;
+    }
+
+    public void setTrainId(String trainId) {
+        this.trainId = trainId;
+    }
+
     public String getTrainNumber() {
         return trainNumber;
     }
@@ -107,11 +120,11 @@ public class Train {
         this.seatNumbers = seatNumbers;
     }
 
-    public Map<String, Time> getStationTImes() {
+    public Map<String, String> getStationTimes() {
         return stationTimes;
     }
 
-    public void setStation(Map<String, Time> stationTimes) {
+    public void setStationTimes(Map<String, String> stationTimes) {
         this.stationTimes = stationTimes;
     }
 

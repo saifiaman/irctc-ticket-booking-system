@@ -15,4 +15,8 @@ public class UserServiceUtil {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 
+    public static String generateTicketId() {
+        return "" + System.currentTimeMillis();
+    }
+
 }
