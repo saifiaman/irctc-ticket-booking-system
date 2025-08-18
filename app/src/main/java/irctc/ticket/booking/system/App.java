@@ -50,10 +50,14 @@ public class App {
                     String signUpName;
                     while (true) {
                         System.out.println("Enter your username to signup: ");
-                        signUpName = sc.nextLine();
+                        signUpName = sc.nextLine().trim();
                         if (signUpName.contains(" ")) {
                             System.out.println("Username cannot contain spaces!");
-                        } else {
+                        } 
+                        else if (signUpName.isEmpty()) {
+                            System.out.println("Username cannot be empty!");
+                        } 
+                        else {
                             break;
                         }
                     }
@@ -84,16 +88,25 @@ public class App {
                             UserServiceUtil.hashPassword(loginPassword), new ArrayList<>(), loginPhoneNumber);
                     try {
                         userBookingService = new UserBookingService(userToLogin);
-                        System.out.println("Login successful!");
+                        if (userBookingService.loginUser()) {
+                            System.out.println("Login successful!");
+                        } else {
+                            System.out.println("Login failed: Invalid credentials.");
+                        }
                     } catch (Exception e) {
                         System.out.println("Login failed: " + e.getMessage());
                     }
                     break;
                 case 3:
+                    if (userBookingService == null || !userBookingService.isUserLoggedIn()) {
+                        System.out.println("❌ Please login first to fetch your bookings.");
+                        break;
+                    }
                     System.out.println("Fetching bookings...");
                     try {
                         Thread.sleep(3000);
                         userBookingService.fetchBooking();
+                        System.out.println("Bookings fetched successfully.");
                     } catch (InterruptedException e) {
                         System.out.println("Thread was interrupted: " + e.getMessage());
                     } catch (Exception e) {
@@ -102,10 +115,11 @@ public class App {
                     break;
 
                 case 4:
+                    sc.nextLine();
                     System.out.println("Enter the source station: ");
-                    String source = sc.nextLine().toLowerCase(); // Converting to lowercase for consistency
+                    String source = sc.nextLine().trim().toLowerCase(); // Converting to lowercase for consistency
                     System.out.println("Enter the destination station: ");
-                    String destination = sc.nextLine().toLowerCase(); // here also converting to lowercase
+                    String destination = sc.nextLine().trim().toLowerCase(); // here also converting to lowercase
 
                     // this will fetch trains that are available
                     List<Train> trains = userBookingService.getTrains(source, destination);

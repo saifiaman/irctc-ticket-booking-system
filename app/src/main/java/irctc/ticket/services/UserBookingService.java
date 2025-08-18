@@ -15,20 +15,43 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UserBookingService {
+
     private List<User> userList;
+    private List<Train> trainList;
     private User user;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String USERS_PATH = "/Users/amansaifi/Desktop/Coding/SpringBoot/irctc-ticket-booking-system/app/src/main/java/irctc/localDb/users.json";
+    private static final String TRAINS_PATH = "/Users/amansaifi/Desktop/Coding/SpringBoot/irctc-ticket-booking-system/app/src/main/java/irctc/localDb/trains.json"; // <--
+                                                                                                                                                                    // Add
+                                                                                                                                                                    // this
 
     public UserBookingService(User user1) throws IOException {
         this.user = user1;
         this.userList = loadUsers();
+        this.trainList = loadTrains();
     }
 
     public UserBookingService() throws IOException {
         this.userList = loadUsers();
+        this.trainList = loadTrains();
+    }
+
+    // Load trains from file
+    public List<Train> loadTrains() {
+        File trains = new File(TRAINS_PATH);
+        if (!trains.exists()) {
+            System.out.println("Train file doesn't exist at: " + trains.getAbsolutePath());
+            return new ArrayList<>();
+        }
+        try {
+            return objectMapper.readValue(trains, new TypeReference<List<Train>>() {
+            });
+        } catch (IOException e) {
+            System.out.println("Error reading train file: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     // Load data from file
@@ -53,7 +76,11 @@ public class UserBookingService {
                 .filter(u -> u.getUsername().equals(user.getUsername())
                         && UserServiceUtil.checkPassword(user.getPassword(), u.getHashedPassword()))
                 .findFirst();
-        return foundUser.isPresent();
+        if (foundUser.isPresent()) {
+            this.user = foundUser.get(); // <-- Set the actual user with tickets!
+            return true;
+        }
+        return false;
     }
 
     // SignUp or register User code
@@ -89,8 +116,25 @@ public class UserBookingService {
 
     public List<Train> getTrains(String source, String destination) {
         try {
-            TrainService trainService = new TrainService();
-            return trainService.searchTrains(source, destination);
+            if (trainList == null) {
+                trainList = loadTrains();
+            }
+            // Filter trains by source and destination (case-insensitive)
+            List<Train> result = new ArrayList<>();
+            for (Train t : trainList) {
+            List<String> stations = t.getStations();
+                if (stations != null && !stations.isEmpty()) {
+                    int sourceIdx = -1, destIdx = -1;
+                    for (int i = 0; i < stations.size(); i++) {
+                        if (stations.get(i).equalsIgnoreCase(source)) sourceIdx = i;
+                        if (stations.get(i).equalsIgnoreCase(destination)) destIdx = i;
+                    }
+                    if (sourceIdx != -1 && destIdx != -1 && sourceIdx < destIdx) {
+                        result.add(t);
+                    }
+                }
+            }
+            return result;
         } catch (Exception e) {
             System.out.println("Error searching for trains: " + e.getMessage());
         }
@@ -117,6 +161,10 @@ public class UserBookingService {
         }
         System.out
                 .println("Seat selected for train " + train.getTrainNumber() + " at row " + row + ", column " + column);
+    }
+
+    public boolean isUserLoggedIn() {
+        return this.user != null;
     }
 
     // Book a seat for a train
