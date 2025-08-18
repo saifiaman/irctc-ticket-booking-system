@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 public class TrainService {
 
-    private static final String TRAIN_DB_PATH = "/Users/amansaifi/Desktop/Coding/SpringBoot/irctc-ticket-booking-system/app/src/main/java/irctc/localDb/users.json";
+    private static final String TRAIN_DB_PATH = "/Users/amansaifi/Desktop/Coding/SpringBoot/irctc-ticket-booking-system/app/src/main/java/irctc/localDb/trains.json";
 
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 

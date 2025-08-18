@@ -1,0 +1,44 @@
+[
+  {
+    "username": "john_doe",
+    "password": "mypassword123",
+    "hashedPassword": "5f4dcc3b5aa765d61d8327deb882cf99",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1-202-555-0147",
+    "bookedTickets": [
+      {
+        "ticketId": "T2001",
+        "trainNumber": "12045",
+        "sourceStation": "New York",
+        "destinationStation": "Washington DC",
+        "travelDate": "2025-08-15",
+        "seatNumber": "B2-15"
+      },
+      {
+        "ticketId": "T2002",
+        "trainNumber": "14008",
+        "sourceStation": "Boston",
+        "destinationStation": "Philadelphia",
+        "travelDate": "2025-09-05",
+        "seatNumber": "C1-10"
+      }
+    ]
+  },
+  {
+    "username": "emma_watson",
+    "password": "securePass456",
+    "hashedPassword": "e99a18c428cb38d5f260853678922e03",
+    "email": "emma.watson@example.com",
+    "phoneNumber": "+44-7700-900845",
+    "bookedTickets": [
+      {
+        "ticketId": "T3001",
+        "trainNumber": "22962",
+        "sourceStation": "London",
+        "destinationStation": "Manchester",
+        "travelDate": "2025-10-12",
+        "seatNumber": "A1-01"
+      }
+    ]
+  }
+]

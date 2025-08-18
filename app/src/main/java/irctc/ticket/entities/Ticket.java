@@ -1,5 +1,7 @@
 package irctc.ticket.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Ticket {
     private String ticketId;
     private String trainNumber;
@@ -30,6 +32,7 @@ public class Ticket {
     }
 
     // get ticket details
+    @JsonIgnore
     public String getTicketDetails() {
         return String.format(
                 "Ticket ID: %s, Train Number: %s, Passenger Name: %s, Source: %s, Destination: %s, Seat: %s, Date: %s, Fare: %.2f, Train: %s",

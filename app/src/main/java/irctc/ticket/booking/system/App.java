@@ -84,6 +84,7 @@ public class App {
                             UserServiceUtil.hashPassword(loginPassword), new ArrayList<>(), loginPhoneNumber);
                     try {
                         userBookingService = new UserBookingService(userToLogin);
+                        System.out.println("Login successful!");
                     } catch (Exception e) {
                         System.out.println("Login failed: " + e.getMessage());
                     }

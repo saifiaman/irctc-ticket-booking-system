@@ -24,11 +24,11 @@ public class UserBookingService {
 
     public UserBookingService(User user1) throws IOException {
         this.user = user1;
-        loadUsers();
+        this.userList = loadUsers();
     }
 
     public UserBookingService() throws IOException {
-        loadUsers();
+        this.userList = loadUsers();
     }
 
     // Load data from file
