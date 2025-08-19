@@ -1,3 +1,104 @@
-[{"username":"john_doe","password":"mypassword123","hashedPassword":"9c87baa223f464954940f859bcf2e233","email":"john.doe@example.com","phoneNumber":"+1-202-555-0147","bookedTickets":[{"ticketId":"T2001","trainNumber":"12045","passengerName":null,"sourceStation":"New York","destinationStation":"Washington DC","seatNumber":"B2-15","travelDate":"2025-08-15","fare":0.0,"train":null},{"ticketId":"T2002","trainNumber":"14008","passengerName":null,"sourceStation":"Boston","destinationStation":"Philadelphia","seatNumber":"C1-10","travelDate":"2025-09-05","fare":0.0,"train":null}]},{"username":"emma_watson","password":"securePass456","hashedPassword":"e99a18c428cb38d5f260853678922e03","email":"emma.watson@example.com","phoneNumber":"+44-7700-900845","bookedTickets":[{"ticketId":"T3001","trainNumber":"22962","passengerName":null,"sourceStation":"London","destinationStation":"Manchester","seatNumber":"A1-01","travelDate":"2025-10-12","fare":0.0,"train":null}]},
-
-{"username":"Aman123","password":"@Aman123","hashedPassword":"$2a$10$sidpPBJW1xp7reVP1CGbfOHiXyzTty50nM1.vry.pAJz73hWswIIK","email":null,"phoneNumber":"b5656fc5-b696-4e3c-b4af-9f0967a62239","bookedTickets":[]}]
+[
+  {
+    "username": "john_doe",
+    "password": "mypassword123",
+    "hashedPassword": "9c87baa223f464954940f859bcf2e233",
+    "email": "john.doe@example.com",
+    "phoneNumber": "+1-202-555-0147",
+    "bookedTickets": [
+      {
+        "ticketId": "T2001",
+        "trainNumber": "12045",
+        "passengerName": null,
+        "sourceStation": "New York",
+        "destinationStation": "Washington DC",
+        "seatNumber": "B2-15",
+        "travelDate": "2025-08-15",
+        "fare": 0.0,
+        "train": null
+      },
+      {
+        "ticketId": "T2002",
+        "trainNumber": "14008",
+        "passengerName": null,
+        "sourceStation": "Boston",
+        "destinationStation": "Philadelphia",
+        "seatNumber": "C1-10",
+        "travelDate": "2025-09-05",
+        "fare": 0.0,
+        "train": null
+      }
+    ]
+  },
+  {
+    "username": "emma_watson",
+    "password": "securePass456",
+    "hashedPassword": "e99a18c428cb38d5f260853678922e03",
+    "email": "emma.watson@example.com",
+    "phoneNumber": "+44-7700-900845",
+    "bookedTickets": [
+      {
+        "ticketId": "T3001",
+        "trainNumber": "22962",
+        "passengerName": null,
+        "sourceStation": "London",
+        "destinationStation": "Manchester",
+        "seatNumber": "A1-01",
+        "travelDate": "2025-10-12",
+        "fare": 0.0,
+        "train": null
+      }
+    ]
+  },
+  {
+    "username": "Aman123",
+    "password": "@Aman123",
+    "hashedPassword": "$2a$10$sidpPBJW1xp7reVP1CGbfOHiXyzTty50nM1.vry.pAJz73hWswIIK",
+    "email": null,
+    "phoneNumber": "b5656fc5-b696-4e3c-b4af-9f0967a62239",
+    "bookedTickets": [
+      {
+        "ticketId": "1755583016068",
+        "trainNumber": null,
+        "passengerName": "Aman123",
+        "sourceStation": "New Delhi",
+        "destinationStation": "Bhopal",
+        "seatNumber": null,
+        "travelDate": "2025-08-15",
+        "fare": 0.0,
+        "train": {
+          "trainId": "T123",
+          "trainNumber": "12045",
+          "trainName": "Shatabdi Express",
+          "sourceStation": "New Delhi",
+          "destinationStation": "Bhopal",
+          "travelDate": "2025-08-15",
+          "departureTime": "06:00",
+          "arrivalTime": "14:30",
+          "fare": 1450.5,
+          "seatNumbers": [
+            [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,1,0],
+            [0,0,0,0,1],
+            [0,0,0,0,0]
+          ],
+          "stationTimes": {
+            "New Delhi": "06:00",
+            "Agra Cantt": "08:15",
+            "Gwalior": "10:10",
+            "Jhansi": "12:05",
+            "Bhopal": "14:30"
+          },
+          "stations": [
+            "New Delhi",
+            "Agra Cantt",
+            "Gwalior",
+            "Jhansi",
+            "Bhopal"
+          ]
+        }
+      }
+    ]
+  }
+]

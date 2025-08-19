@@ -122,12 +122,14 @@ public class UserBookingService {
             // Filter trains by source and destination (case-insensitive)
             List<Train> result = new ArrayList<>();
             for (Train t : trainList) {
-            List<String> stations = t.getStations();
+                List<String> stations = t.getStations();
                 if (stations != null && !stations.isEmpty()) {
                     int sourceIdx = -1, destIdx = -1;
                     for (int i = 0; i < stations.size(); i++) {
-                        if (stations.get(i).equalsIgnoreCase(source)) sourceIdx = i;
-                        if (stations.get(i).equalsIgnoreCase(destination)) destIdx = i;
+                        if (stations.get(i).equalsIgnoreCase(source))
+                            sourceIdx = i;
+                        if (stations.get(i).equalsIgnoreCase(destination))
+                            destIdx = i;
                     }
                     if (sourceIdx != -1 && destIdx != -1 && sourceIdx < destIdx) {
                         result.add(t);
@@ -170,41 +172,60 @@ public class UserBookingService {
     // Book a seat for a train
     public Boolean bookTrainSeat(Train trainSelectedForBooking, int row, int seat) {
         try {
-            TrainService trainService = new TrainService();
-            List<List<Integer>> seats = trainSelectedForBooking.getSeatNumbers();
+            // Reload the latest train list for real-time data
+            this.trainList = loadTrains();
+
+            // Find the train in the list by trainId
+            Train trainToBook = this.trainList.stream()
+                    .filter(t -> t.getTrainId() != null && t.getTrainId().equals(trainSelectedForBooking.getTrainId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (trainToBook == null) {
+                System.out.println("Train not found!");
+                return Boolean.FALSE;
+            }
+
+            List<List<Integer>> seats = trainToBook.getSeatNumbers();
             if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
+                if (seats.get(row).get(seat) == 1) {
+                    System.out.println("❌ This seat is already booked. Please choose another seat.");
+                    return Boolean.FALSE;
+                }
                 if (seats.get(row).get(seat) == 0) {
                     seats.get(row).set(seat, 1);
+                    trainToBook.setSeatNumbers(seats);
 
-                    trainSelectedForBooking.setSeatNumbers(seats);
-                    trainService.addTrain(trainSelectedForBooking);
+                    // Persist the updated train list
+                    saveTrainListToFile();
 
+                    // Create and add ticket to user
                     Ticket ticket = new Ticket();
-
-                    ticket.setSourceStation(trainSelectedForBooking.getStations().getFirst());
-                    ticket.setDestinationStation(trainSelectedForBooking.getStations().getLast());
-                    ticket.setTrain(trainSelectedForBooking);
+                    ticket.setSourceStation(trainToBook.getStations().getFirst());
+                    ticket.setDestinationStation(trainToBook.getStations().getLast());
+                    ticket.setTrain(trainToBook);
                     ticket.setPassengerName(user.getUsername());
-                    ticket.setTravelDate("2021-09-01");
+                    ticket.setTravelDate(trainToBook.getTravelDate());
                     ticket.setTicketId(UserServiceUtil.generateTicketId());
 
                     user.getBookedTickets().add(ticket);
 
-                    System.out.println("Seat booked successfully  !  ");
-
-                    System.out.println(ticket.getTicketDetails());
-
                     saveUserListToFile();
-                    return true; // Booking successful
+                    return Boolean.TRUE;
                 } else {
-                    return false; // Execute when Seat is already booked
+                    return Boolean.FALSE; // Seat already booked
                 }
             } else {
-                return false; // Execute when Invalid row or seat index
+                return Boolean.FALSE; // Invalid row or seat index
             }
         } catch (IOException ex) {
             return Boolean.FALSE;
         }
     }
 
+    // Add this helper method to persist the train list
+    private void saveTrainListToFile() throws IOException {
+        File trains = new File(TRAINS_PATH);
+        objectMapper.writeValue(trains, trainList);
+    }
 }

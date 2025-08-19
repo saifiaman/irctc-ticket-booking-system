@@ -4,15 +4,15 @@
 package irctc.ticket.booking.system;
 
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.UUID;
 
 import irctc.ticket.entities.Train;
-import irctc.ticket.services.UserBookingService;
 import irctc.ticket.entities.User; // Changed from irctc.ticket.booking.system.models.User
+import irctc.ticket.services.UserBookingService;
 import irctc.ticket.util.UserServiceUtil; // Also fixed this import
 
 public class App {
@@ -176,6 +176,10 @@ public class App {
                     break;
 
                 case 5:
+                    if (userBookingService == null || !userBookingService.isUserLoggedIn()) {
+                        System.out.println("❌ Please login first to book a seat.");
+                        break;
+                    }
                     if (trainSelectedForBooking == null) {
                         System.out.println("❌ Please select a train first in option 4!");
                         break;
@@ -210,6 +214,10 @@ public class App {
                     }
                     break;
                 case 6:
+                    if (userBookingService == null || !userBookingService.isUserLoggedIn()) {
+                        System.out.println("❌ Please login first to cancel a booking.");
+                        break;
+                    }
                     System.out.println("Enter the ticket number to cancel the booking");
                     String ticketNumber = sc.nextLine();
                     boolean isCancelled = userBookingService.cancelBooking(ticketNumber);
